@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Sélection des éléments
+ 
     const plusButtons = document.querySelectorAll('.fa-plus-circle');
     const minusButtons = document.querySelectorAll('.fa-minus-circle');
     const trashButtons = document.querySelectorAll('.fa-trash-alt');
@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const unitPrices = document.querySelectorAll('.unit-price');
     const totalPriceSpan = document.querySelector('.total');
 
-    // Fonction pour calculer le total
+  
     function calculateTotal() {
         let total = 0;
         quantitySpans.forEach((span, index) => {
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
         totalPriceSpan.textContent = total + ' $';
     }
 
-    // Boutons +
+  
     plusButtons.forEach((button, index) => {
         button.addEventListener('click', function() {
             let quantity = parseInt(quantitySpans[index].textContent);
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Boutons -
+
     minusButtons.forEach((button, index) => {
         button.addEventListener('click', function() {
             let quantity = parseInt(quantitySpans[index].textContent);
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Boutons poubelle (suppression)
+   
     trashButtons.forEach((button, index) => {
         button.addEventListener('click', function() {
             const cardBody = this.closest('.card-body');
@@ -51,7 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Boutons cœur (like)
     heartButtons.forEach(button => {
         button.addEventListener('click', function() {
             this.classList.toggle('liked');
@@ -63,6 +62,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Calcul initial
     calculateTotal();
 });

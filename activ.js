@@ -1,72 +1,68 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Sélectionner tous les éléments nécessaires
-    const quantityMinusButtons = document.querySelectorAll('.minus-btn');
-    const quantityPlusButtons = document.querySelectorAll('.plus-btn');
-    const deleteButtons = document.querySelectorAll('.delete-btn');
-    const likeButtons = document.querySelectorAll('.like-btn');
-    const quantityInputs = document.querySelectorAll('.quantity');
-    const priceElements = document.querySelectorAll('.price');
-    const totalPriceElement = document.getElementById('total-price');
-    
-   
+    // Sélection des éléments
+    const plusButtons = document.querySelectorAll('.fa-plus-circle');
+    const minusButtons = document.querySelectorAll('.fa-minus-circle');
+    const trashButtons = document.querySelectorAll('.fa-trash-alt');
+    const heartButtons = document.querySelectorAll('.fa-heart');
+    const quantitySpans = document.querySelectorAll('.quantity');
+    const unitPrices = document.querySelectorAll('.unit-price');
+    const totalPriceSpan = document.querySelector('.total');
+
+    // Fonction pour calculer le total
     function calculateTotal() {
         let total = 0;
-        document.querySelectorAll('.item').forEach(item => {
-            if (!item.classList.contains('removed')) {
-                const price = parseFloat(item.querySelector('.price').textContent.replace('$', ''));
-                const quantity = parseInt(item.querySelector('.quantity').value);
-                total += price * quantity;
-            }
+        quantitySpans.forEach((span, index) => {
+            const quantity = parseInt(span.textContent);
+            const price = parseFloat(unitPrices[index].textContent);
+            total += quantity * price;
         });
-        totalPriceElement.textContent = '$' + total.toFixed(2);
+        totalPriceSpan.textContent = total + ' $';
     }
-    
 
-    quantityMinusButtons.forEach(button => {
+    // Boutons +
+    plusButtons.forEach((button, index) => {
         button.addEventListener('click', function() {
-            const input = this.nextElementSibling;
-            let value = parseInt(input.value);
-            if (value > 1) {
-                value--;
-                input.value = value;
+            let quantity = parseInt(quantitySpans[index].textContent);
+            quantity++;
+            quantitySpans[index].textContent = quantity;
+            calculateTotal();
+        });
+    });
+
+    // Boutons -
+    minusButtons.forEach((button, index) => {
+        button.addEventListener('click', function() {
+            let quantity = parseInt(quantitySpans[index].textContent);
+            if (quantity > 0) {
+                quantity--;
+                quantitySpans[index].textContent = quantity;
                 calculateTotal();
             }
         });
     });
-    
 
-    quantityPlusButtons.forEach(button => {
+    // Boutons poubelle (suppression)
+    trashButtons.forEach((button, index) => {
         button.addEventListener('click', function() {
-            const input = this.previousElementSibling;
-            let value = parseInt(input.value);
-            value++;
-            input.value = value;
+            const cardBody = this.closest('.card-body');
+            cardBody.style.display = 'none';
+            quantitySpans[index].textContent = '0';
             calculateTotal();
         });
     });
-    
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const item = this.closest('.item');
-            item.classList.add('removed');
-            item.style.display = 'none';
-            calculateTotal();
-        });
-    });
-    
-    likeButtons.forEach(button => {
+
+    // Boutons cœur (like)
+    heartButtons.forEach(button => {
         button.addEventListener('click', function() {
             this.classList.toggle('liked');
+            if (this.classList.contains('liked')) {
+                this.style.color = 'red';
+            } else {
+                this.style.color = 'black';
+            }
         });
     });
-    
-    quantityInputs.forEach(input => {
-        input.addEventListener('change', function() {
-            if (this.value < 1) this.value = 1;
-            calculateTotal();
-        });
-    });
-    
-    
+
+    // Calcul initial
     calculateTotal();
 });
